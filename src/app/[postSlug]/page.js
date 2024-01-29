@@ -10,7 +10,13 @@ import { BLOG_TITLE } from "@/constants";
 import COMPONENT_MAP from "@/helpers/mdx-components";
 
 export async function generateMetadata({ params }) {
-  const { frontmatter } = await loadBlogPost(params.postSlug);
+  const blogPostData = await loadBlogPost(params.postSlug);
+
+  if (!blogPostData) {
+    return null;
+  }
+
+  const { frontmatter } = blogPostData;
 
   return {
     title: `${frontmatter.title} • ${BLOG_TITLE}`,
@@ -19,7 +25,13 @@ export async function generateMetadata({ params }) {
 }
 
 async function BlogPost({ params }) {
-  const { frontmatter, content } = await loadBlogPost(params.postSlug);
+  const blogPostData = await loadBlogPost(params.postSlug);
+
+  if (!blogPostData) {
+    return null;
+  }
+
+  const { frontmatter, content } = blogPostData;
   return (
     <article className={styles.wrapper}>
       <BlogHero
